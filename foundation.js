@@ -1,4 +1,14 @@
 
+/**
+ * <Foundation.js>
+ * 
+ * A small-collection of variables/functions that ought to be included inline in
+ * a document. Functionality includes script booting, logging, function queuing
+ * and document ready function/callback firing.
+ * 
+ * @author Oliver Nassar <onassar@gmail.com>
+ */
+
 // start metric
 var start = (new Date()).getTime(),
 
@@ -11,10 +21,19 @@ var start = (new Date()).getTime(),
      * Function to accomodate booting js files with callback firing. Boots
      * scripts in sequence/series, rather than in parallel.
      * 
-     * @access public
-     * @param  string|Object assets
-     * @param  Function callback
-     * @return void
+     * @access  public
+     * @param   string|Object assets
+     * @param   Function callback
+     * @return  void
+     * @example
+     * <code>
+     *     js(
+     *         ['/static/js/c.js'],
+     *         function() {
+     *             log('Booted!');
+     *         }
+     *     );
+     * </code>
      */
     js = function(assets, callback) {
 
@@ -106,8 +125,12 @@ var start = (new Date()).getTime(),
      * 
      * Safe console-logging.
      * 
-     * @access public
-     * @return void
+     * @access  public
+     * @return  void
+     * @example
+     * <code>
+     *     log('Hello World!');
+     * </code>
      */
     log = function() {
         if (
@@ -130,9 +153,15 @@ var start = (new Date()).getTime(),
              * 
              * Pushes <task> (a function) to the <stack>-closure.
              * 
-             * @access public
-             * @param  Function task
-             * @return void
+             * @access  public
+             * @param   Function task
+             * @return  void
+             * @example
+             * <code>
+             *     queue.push(function() {
+             *         log('Callback executed.');
+             *     });
+             * </code>
              */
             push: function(task) {
                 stack.push(task);
@@ -158,10 +187,23 @@ var start = (new Date()).getTime(),
      * 
      * Registers a function to be fired when the document is ready.
      * 
-     * @see    http://javascript.nwbox.com/ContentLoaded/contentloaded.js
-     * @access public
-     * @param  Function callback
-     * @return void
+     * @see     http://javascript.nwbox.com/ContentLoaded/contentloaded.js
+     * @access  public
+     * @param   Function callback
+     * @return  void
+     * @example
+     * <code>
+     *     ready(function() {
+     *         js(
+     *             ['/static/js/a.js', '/static/js/b.js'],
+     *             function() {
+     *                 log('pre: ', (new Date()).getTime() - start);
+     *                 queue.process();
+     *                 log('post: ', (new Date()).getTime() - start);
+     *             }
+     *         );
+     *     });
+     * </code>
      */
     ready = function(callback) {
         var done = false,
