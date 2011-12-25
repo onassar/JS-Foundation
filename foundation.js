@@ -151,4 +151,61 @@ var start = (new Date()).getTime(),
                 while (task = stack.shift()) { task(); }
             }
         };
-    })();
+    })(),
+
+    /**
+     * ready
+     * 
+     * Registers a function to be fired when the document is ready.
+     * 
+     * @see    http://javascript.nwbox.com/ContentLoaded/
+     * @access public
+     * @param  Function callback
+     * @return void
+     */
+    ready = function(callback) {
+        var done = false,
+            top = true,
+            doc = window.document,
+            root = doc.documentElement,
+    
+            add = doc.addEventListener ? 'addEventListener' : 'attachEvent',
+            rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent',
+            pre = doc.addEventListener ? '' : 'on',
+    
+            init = function(e) {
+                if (e.type === 'readystatechange' && doc.readyState !== 'complete') {
+                    return;
+                }
+                (e.type === 'load' ? window : doc)[rem](pre + e.type, init, false);
+                if (!done && (done = true)) {
+                    callback.call(window, e.type || e);
+                }
+            },
+    
+            poll = function() {
+                try {
+                    root.doScroll('left');
+                } catch (e) {
+                    setTimeout(poll, 50);
+                    return;
+                }
+                init('poll');
+            };
+    
+        if (doc.readyState === 'complete') {
+            callback.call(window, 'lazy');
+        } else {
+            if (doc.createEventObject && root.doScroll) {
+                try {
+                    top = !window.frameElement;
+                } catch (e) {}
+                if (top) {
+                    poll();
+                }
+            }
+            doc[add](pre + 'DOMContentLoaded', init, false);
+            doc[add](pre + 'readystatechange', init, false);
+            window[add](pre + 'load', init, false);
+        }
+    };
