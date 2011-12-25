@@ -128,7 +128,7 @@ var start = (new Date()).getTime(),
             /**
              * push
              * 
-             * Pushs <task> (a function) to the <stack>-closure.
+             * Pushes <task> (a function) to the <stack>-closure.
              * 
              * @access public
              * @param  Function task
