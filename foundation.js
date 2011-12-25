@@ -158,7 +158,7 @@ var start = (new Date()).getTime(),
      * 
      * Registers a function to be fired when the document is ready.
      * 
-     * @see    http://javascript.nwbox.com/ContentLoaded/
+     * @see    http://javascript.nwbox.com/ContentLoaded/contentloaded.js
      * @access public
      * @param  Function callback
      * @return void
