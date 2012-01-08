@@ -15,9 +15,11 @@ it&#039;s JavaScript dependencies have been loaded/booted in.
 The following example showcases the straightforward way to boot a static js
 file, and after it&#039;s been booted, fire a callback.
 
+``` javascript
     js(
         ['/static/js/c.js'],
         function() {
             log('Booted!');
         }
     );
+```
