@@ -23,3 +23,11 @@ js(
     }
 );
 ```
+
+### Usage
+I use this script in the `head` of all the pages I work on. It&#039;s the only
+JS the page gets booted with. Everything else gets loaded in through the `js`
+function.
+
+It&#039;s part of my [HTML-Blueprint](https://github.com/onassar/HTML-Blueprint)
+library for that reason; really light weight but powerful.
