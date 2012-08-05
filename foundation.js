@@ -130,7 +130,6 @@ var start = (new Date()).getTime(),
 
             // mark that required assets have been included
             included = true;
-            
         }
 
         // recursive booting
