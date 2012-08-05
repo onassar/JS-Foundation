@@ -16,6 +16,15 @@ var start = (new Date()).getTime(),
     booted = [],
 
     /**
+     * Boolean tracking whether the "required" scripts have been
+     * included for booting.
+     */
+    included = false,
+
+    // scripts which must be for further <foundation> usage
+    required = [],
+
+    /**
      * js
      * 
      * Function to accomodate booting js files with callback firing. Boots
@@ -38,36 +47,27 @@ var start = (new Date()).getTime(),
     js = function(assets, callback) {
 
         /**
-         * __contains
+         * If only one argument is defined, presume it's the callback. This case
+         * is allowed when a <require> method is called on against the
+         * foundation library, but not script paths are passed into the <js>
+         * method.
+         */
+        if (arguments.length === 1) {
+            callback = assets;
+            assets = [];
+        }
+
+        /**
+         * __boot
          * 
-         * Peforms a check against an array to see if it contains another
-         * object.
+         * Performs a script boot and runs the callback after completion.
          * 
          * @access private
-         * @param  Array arr
-         * @param  String query
+         * @param  string src
+         * @param  Function callback
          * @return void
          */
-        var __contains = function(arr, query) {
-                for(var x = 0, l = arr.length; x < l; ++x) {
-                    if(arr[x] === query){
-                        return true;
-                    }
-                }
-                return false;
-            },
-
-            /**
-             * __boot
-             * 
-             * Performs a script boot and runs the callback after completion.
-             * 
-             * @access private
-             * @param  string src
-             * @param  Function callback
-             * @return void
-             */
-            __boot = function(src, callback) {
+        var __boot = function(src, callback) {
                 var script = document.createElement('script'),
                     scripts = document.getElementsByTagName('script'),
                     length = scripts.length,
@@ -95,7 +95,43 @@ var start = (new Date()).getTime(),
                 }
                 script.setAttribute('src', src);
                 document.body.insertBefore(script, scripts[(length - 1)].nextSibling);
+            },
+
+            /**
+             * __contains
+             * 
+             * Peforms a check against an array to see if it contains another
+             * object.
+             * 
+             * @access private
+             * @param  Array arr
+             * @param  String query
+             * @return void
+             */
+            __contains = function(arr, query) {
+                for(var x = 0, l = arr.length; x < l; ++x) {
+                    if(arr[x] === query){
+                        return true;
+                    }
+                }
+                return false;
             };
+
+        // check if the required scripts have been included
+        if (included === false) {
+
+            // reset assets as array
+            if (typeof assets === 'string') {
+                assets = [assets];
+            }
+
+            // concat required scripts as part of defined assets
+            assets = assets.concat(required);
+
+            // mark that required assets have been included
+            included = true;
+            
+        }
 
         // recursive booting
         if (typeof assets === 'string') {
@@ -250,4 +286,26 @@ var start = (new Date()).getTime(),
             doc[add](pre + 'readystatechange', init, false);
             window[add](pre + 'load', init, false);
         }
+    },
+
+    /**
+     * require
+     * 
+     * Sets an asset, or multiple, as requirements for the page.
+     * 
+     * @access  public
+     * @param   string|Object assets
+     * @return  void
+     * @example
+     * <code>
+     *     require(
+     *         ['/static/js/a.js']
+     *     );
+     * </code>
+     */
+    require = function(assets) {
+        if (typeof assets === 'string') {
+            assets = [assets];
+        }
+        required = required.concat(assets);
     };
