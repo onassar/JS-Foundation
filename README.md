@@ -36,6 +36,8 @@ library for that reason; really light weight but powerful.
 As a result of using this library, the following properties are added to the
 window object:
 
+* `start` a microsecond value measuring when the Javascript started to get
+executed
 * `booted` An array of all the scripts that were booted
 * `included` Whether or not scripts that were defined using the `require` method
 have been included within the scope of the booting sequence (this is
@@ -46,13 +48,13 @@ the `queue` `list` stack
 functions after the page is ready for processing
 
 ### Methods
-The following methods are available for use with this foundation library.
+The following methods are available for use with this foundation library:
 
 * `js` A method accepting one or two properties. If one is passed in, it presumes
 that it is the callback, and will be executed after all the scripts defined
 using the `require` method have been loaded. If two are parameters are defined,
 the first is assumed to be a single or multiple (array) of assets that should be
-loaded before the callback (second) function is executed)
+loaded before the callback (second) function is executed
 * `log` A logging method that prevents errors in browsers where the `console`
 object is not available, or the `log` method on that object is not available
 * `queue.push` A method that accepts a single function as it's parameter, which
@@ -64,3 +66,36 @@ ready for processing
 * `require` A function, which accepts a string of array of script resources,
 which are included for booting in the `js` method listed above, before the page
 is marked as ready for further processing
+
+### Detailed Example
+
+    <script type="text/javascript">
+        require([
+            'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'
+        ]);
+    </script>
+    <script type="text/javascript">
+    //<![CDATA[
+        ready(function() {
+            js(
+                function() {
+                    log('pre: ', (new Date()).getTime() - start);
+                    queue.process();
+                    log('post: ', (new Date()).getTime() - start);
+                }
+            );
+        });
+    //]]>
+    </script>
+
+The example above will first define `jquery.js` as a requirement.  
+It will then wait until the page is ready for execution, passing in a function
+which will load in all the dependencies for the page (eg. the `js` method
+call).  
+The `js` method itself will generally accept two parameters: a single or
+multiple resources, and a callback after those resources have been included. In
+this case, only the callback is defined.  
+This callback executes the `queue.process` method, which runs through all the
+functions that were passed into the `queue.push` method, and executes them.  
+Finally, the two `log` method calls are used to measure the execution duration
+of running through the queue.
