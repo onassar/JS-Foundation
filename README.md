@@ -69,24 +69,26 @@ is marked as ready for further processing
 
 ### Detailed Example
 
-    <script type="text/javascript">
-        require([
-            'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'
-        ]);
-    </script>
-    <script type="text/javascript">
-    //<![CDATA[
-        ready(function() {
-            js(
-                function() {
-                    log('pre: ', (new Date()).getTime() - start);
-                    queue.process();
-                    log('post: ', (new Date()).getTime() - start);
-                }
-            );
-        });
-    //]]>
-    </script>
+``` html
+<script type="text/javascript">
+    require([
+        'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'
+    ]);
+</script>
+<script type="text/javascript">
+//<![CDATA[
+    ready(function() {
+        js(
+            function() {
+                log('pre: ', (new Date()).getTime() - start);
+                queue.process();
+                log('post: ', (new Date()).getTime() - start);
+            }
+        );
+    });
+//]]>
+</script>
+```
 
 The example above will first define `jquery.js` as a requirement.  
 It will then wait until the page is ready for execution, passing in a function
