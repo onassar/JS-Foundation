@@ -1,4 +1,3 @@
-
 /**
  * <Foundation.js>
  * 
@@ -75,7 +74,7 @@ var start = (new Date()).getTime(),
                         try {
                             callback && callback();
                         } catch(exception) {
-                            log('[Caught Exception]', exception);
+                            __error(exception);
                         }
                     };
                 script.setAttribute('type', 'text/javascript');
@@ -115,6 +114,22 @@ var start = (new Date()).getTime(),
                     }
                 }
                 return false;
+            },
+
+            /**
+             * __error
+             * 
+             * Handles logging out of an error (eg. TypeError) notice and
+             * stack.
+             * 
+             * @access private
+             * @param  mixed exception
+             * @return void
+             */
+            __error = function(exception) {
+                log('Caught Exception:');
+                log(exception.stack);
+                log('');
             };
 
         // check if the required scripts have been included
@@ -149,7 +164,7 @@ var start = (new Date()).getTime(),
                 try {
                     callback && callback();
                 } catch(exception) {
-                    log('[Caught Exception]', exception);
+                    __error(exception);
                 }
             }
         }
