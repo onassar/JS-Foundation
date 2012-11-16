@@ -5,6 +5,7 @@
  * a document. Functionality includes script booting, logging, function queuing
  * and document ready function/callback firing.
  * 
+ * @see    <http://jscompress.com/>
  * @author Oliver Nassar <onassar@gmail.com>
  */
 
@@ -45,13 +46,17 @@ var start = (new Date()).getTime(),
      */
     js = function(assets, callback) {
 
+        // if no arguments passed, no assets or callback
+        if (arguments.length === 0) {
+            callback = function() {};
+            assets = [];
+        }
         /**
-         * If only one argument is defined, presume it's the callback. This case
-         * is allowed when a <require> method is called on against the
-         * foundation library, but not script paths are passed into the <js>
-         * method.
+         * Otherwise if only one argument is defined, presume it's the callback. This case
+         * is allowed when a <require> method is called against the foundation
+         * library, but no script paths are passed into the <js> method.
          */
-        if (arguments.length === 1) {
+        else if (arguments.length === 1) {
             callback = assets;
             assets = [];
         }
@@ -271,7 +276,17 @@ var start = (new Date()).getTime(),
                 }
                 (e.type === 'load' ? window : doc)[rem](pre + e.type, init, false);
                 if (!done && (done = true)) {
-                    callback.call(window, e.type || e);
+
+                    /**
+                     * Originally passed event-type (eg. DOMContentLoaded or
+                     * readystatechange) to callback. Caused problems when
+                     * passing <js> directly as callback (since it would then
+                     * set the <assets> argument to the event-type string).
+                     * 
+                     * Thus, no arguments getting passed to the callback :)
+                     */
+                    callback();
+                    // callback.call(window, e.type || e);
                 }
             },
     
