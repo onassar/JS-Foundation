@@ -233,6 +233,26 @@ var start = (new Date()).getTime(),
             process: function() {
                 var task;
                 while (task = stack.shift()) { task(); }
+            },
+
+            /**
+             * unshift
+             * 
+             * Pushes <task> (a function) to the beginning of the
+             * <stack>-closure.
+             * 
+             * @access  public
+             * @param   Function task
+             * @return  void
+             * @example
+             * <code>
+             *     queue.unshift(function() {
+             *         log('Callback executed.');
+             *     });
+             * </code>
+             */
+            unshift: function(task) {
+                stack.unshift(trask);
             }
         };
     })(),
